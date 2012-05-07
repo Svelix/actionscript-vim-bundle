@@ -20,6 +20,12 @@ endif
   let main_syntax = 'actionscript'
 endif
 
+"" Drop fold if it set but VIM doesn't support it.
+let b:actionscript_fold='true'
+if version < 600    " Don't support the old version
+  unlet! b:actionscript_fold
+endif
+
 " based on "JavaScript" VIM syntax by Claudio Fleiner <claudio@fleiner.com>
 
 syn case ignore
@@ -40,7 +46,6 @@ syn keyword actionScriptCase				break continue switch case default
 syn keyword actionScriptConstructor			new
 syn keyword actionScriptObjects				arguments Array Boolean Date _global Math Number Object String super var this Accessibility Color Key _level Mouse _root Selection Sound Stage System TextFormat LoadVars XML XMLSocket XMLNode LoadVars Button TextField TextSnapshot CustomActions Error ContextMenu ContextMenuItem NetConnection NetStream Video PrintJob MovieClipLoader StyleSheet Camera LocalConnection Microphone SharedObject MovieClip
 syn keyword actionScriptStatement			return with
-syn keyword actionScriptFunction			function on onClipEvent
 syn keyword actionScriptValue				true false undefined null NaN void
 syn keyword actionScriptArray				concat join length pop push reverse shift slice sort sortOn splice toString unshift
 syn keyword actionScriptDate				getDate getDay getFullYear getHours getMilliseconds getMinutes getMonth getSeconds getTime getTimezoneOffset getUTCDate getUTCDay getUTCFullYear getUTCHours getUTCMilliseconds getUTCMinutes getUTCMonth getUTCSeconds getYear setDate setFullYear setHours setMilliseconds setMinutes setMonth setSeconds setTime setUTCDate setUTCFullYear setUTCHours setUTCMilliseconds setUTCMinutes setUTCMonth setUTCSeconds setYear UTC 
@@ -59,7 +64,7 @@ syn keyword actionScriptTextFormat			align blockIndent bold bullet color font ge
 syn keyword actionScriptCommunication		contentType getBytesLoaded getBytesTotal load loaded onLoad send sendAndLoad toString	addRequestHeader fscommand MMExecute
 syn keyword actionScriptXMLSocket			close connect onClose onConnect onData onXML
 syn keyword actionScriptTextField			autoSize background backgroundColor border borderColor bottomScroll embedFonts _focusrect getDepth getFontList getNewTextFormat getTextFormat hscroll html htmlText maxChars maxhscroll maxscroll multiline onChanged onScroller onSetFocus _parent password _quality removeTextField replaceSel replaceText restrict selectable setNewTextFormat setTextFormat text textColor textHeight textWidth type variable wordWrap condenseWhite mouseWheelEnabled textFieldHeight textFieldWidth ascent descent
-syn keyword actionScriptMethods				callee caller _alpha attachMovie beginFill beginGradientFill clear createEmptyMovieClip createTextField _currentframe curveTo _droptarget duplicateMovieClip enabled endFill focusEnabled _framesloaded getBounds globalToLocal gotoAndPlay gotoAndStop _height _highquality hitArea hitTest lineStyle lineTo loadMovie loadMovieNum loadVariables loadVariablesNum localToGlobal moveTo _name nextFrame onDragOut onDragOver onEnterFrame onKeyDown onKeyUp onKillFocus onMouseDown onMouseMove onMouseUp onPress onRelease onReleaseOutside onRollOut onRollOver onUnload play prevFrame removeMovieClip _rotation setMask _soundbuftime startDrag stopDrag swapDepths tabChildren tabIndex _target _totalframes trackAsMenu unloadMovie unloadMovieNum updateAfterEvent _url useHandCursor _visible _width _x _xmouse _xscale _y _ymouse _yscale tabEnabled asfunction call setInterval clearInterval setProperty stopAllSounds #initclip #endinitclip delete unescape escape eval apply prototype getProperty getTimer getURL getVersion ifFrameLoaded #include instanceof int new nextScene parseFloat parseInt prevScene print printAsBitmap printAsBitmapNum printNum scroll set targetPath tellTarget toggleHighQuality trace typeof isActive getInstanceAtDepth getNextHighestDepth getNextDepth getSWFVersion getTextSnapshot isFinite isNAN updateProperties _lockroot get install list uninstall showMenu onSelect builtInItems save zoom quality loop rewind forward_back customItems caption separatorBefore visible attachVideo bufferLength bufferTime currentFps onStatus pause seek setBuffertime smoothing time bytesLoaded bytesTotal addPage paperWidth paperHeight pageWidth pageHeight orientation loadClip unloadClip getProgress onLoadStart onLoadProgress onLoadComplete onLoadInit onLoadError styleSheet copy hideBuiltInItem transform activityLevel allowDomain allowInsecureDomain attachAudio bandwidth deblocking domain flush fps gain getLocal getRemote getSize index isConnected keyFrameInterval liveDelay loopback motionLevel motionTimeOut menu muted names onActivity onSync publish rate receiveAudio receiveVideo setFps setGain setKeyFrameInterval setLoopback setMode setMotionLevel setQuality setRate setSilenceLevel setUseEchoSuppression showSettings setClipboard silenceLevel silenceTimeOut useEchoSuppression
+syn keyword actionScriptMethods				callee caller _alpha attachMovie beginFill beginGradientFill clear createEmptyMovieClip createTextField _currentframe curveTo _droptarget duplicateMovieClip enabled endFill focusEnabled _framesloaded getBounds globalToLocal gotoAndPlay gotoAndStop _height _highquality hitArea hitTest lineStyle lineTo loadMovie loadMovieNum loadVariables loadVariablesNum localToGlobal moveTo _name nextFrame onDragOut onDragOver onEnterFrame onKeyDown onKeyUp onKillFocus onMouseDown onMouseMove onMouseUp onPress onRelease onReleaseOutside onRollOut onRollOver onUnload play prevFrame removeMovieClip _rotation setMask _soundbuftime startDrag stopDrag swapDepths tabChildren tabIndex _target _totalframes trackAsMenu unloadMovie unloadMovieNum updateAfterEvent _url useHandCursor _visible _width _x _xmouse _xscale _y _ymouse _yscale tabEnabled asfunction call setInterval clearInterval setProperty stopAllSounds #initclip #endinitclip delete unescape escape eval apply prototype getProperty getTimer getURL getVersion ifFrameLoaded #include instanceof int new nextScene parseFloat parseInt prevScene print printAsBitmap printAsBitmapNum printNum scroll targetPath tellTarget toggleHighQuality trace typeof isActive getInstanceAtDepth getNextHighestDepth getNextDepth getSWFVersion getTextSnapshot isFinite isNAN updateProperties _lockroot install list uninstall showMenu onSelect builtInItems save zoom quality loop rewind forward_back customItems caption separatorBefore visible attachVideo bufferLength bufferTime currentFps onStatus pause seek setBuffertime smoothing time bytesLoaded bytesTotal addPage paperWidth paperHeight pageWidth pageHeight orientation loadClip unloadClip getProgress onLoadStart onLoadProgress onLoadComplete onLoadInit onLoadError styleSheet copy hideBuiltInItem transform activityLevel allowDomain allowInsecureDomain attachAudio bandwidth deblocking domain flush fps gain getLocal getRemote getSize index isConnected keyFrameInterval liveDelay loopback motionLevel motionTimeOut menu muted names onActivity onSync publish rate receiveAudio receiveVideo setFps setGain setKeyFrameInterval setLoopback setMode setMotionLevel setQuality setRate setSilenceLevel setUseEchoSuppression showSettings setClipboard silenceLevel silenceTimeOut useEchoSuppression
 syn match   actionScriptBraces				"([{}])"
 syn keyword actionScriptException 			try catch finally throw name message
 syn keyword actionScriptXML					attributes childNodes cloneNode createElement createTextNode docTypeDecl status firstChild hasChildNodes lastChild insertBefore nextSibling nodeName nodeType nodeValue parentNode parseXML previousSibling removeNode xmlDecl ignoreWhite
@@ -86,13 +91,43 @@ syn keyword actionScriptInclude #include #initClip #endInitClip
 syn keyword as3Errors EOFError  IllegalOperationError  IOError  MemoryError  ScriptTimeoutError  StackOverflowError ArgumentError DefinitionError EvalError RangeError ReferenceError SecurityError SyntaxError TypeError URIError VerifyError VideoError InvalidSWFError
 syn keyword as3Events	DataEvent ErrorEvent Event ScrollEvent ProgressEvent SecurityErrorEvent ComponentEvent ProgressEvent IOErrorEvent ComponentEvent ColorPickerEvent ListEvent MouseEvent TextEvent DataChangeEvent HTTPStatusEvent IMEEvent TimerEvent TweenEvent AutoLayoutEvent CaptionChangeEvent CaptionTargetEvent SoundEvent VideoEvent  SkinErrorEvent LayoutEvent VideoProgressEvent MetadataEvent IVPEvent KeyboardEvent FocusEvent FullScreenEvent AsyncErrorEvent FocusEvent KeyboardEvent NetStatusEvent StatusEvent SyncEvent DataGridEvent SliderEvent
 
+"" Code blocks
+syntax cluster actionScriptAll       contains=actionScriptLineComment,actionScriptCommentSkip,actionScriptCommentString,actionScriptComment2String,actionScriptComment,actionScriptSpecial,actionScriptStringD,actionScriptStringS,actionScriptSpecialCharacter,actionScriptNumber,actionScriptRegexpString,actionScriptConditional,actionScriptRepeat,actionScriptCase,actionScriptConstructor,actionScriptObjects,actionScriptStatement,actionScriptValue,actionScriptArray,actionScriptDate,actionScriptMath,actionScriptNumberObj,actionScriptObject,actionScriptString,actionScriptColor,actionScriptKey,actionScriptMouse,actionScriptSelection,actionScriptSound,actionScriptStage,actionScriptSystem,actionScriptTextFormat,actionScriptCommunication,actionScriptXMLSocket,actionScriptTextField,actionScriptMethods,actionScriptBraces,actionScriptException,actionScriptXML,actionScriptArrayConstant,actionScriptStringConstant,actionScriptEventConstant,actionScriptTextSnapshot,actionScriptID3,actionScriptAS2,actionScriptStyleSheet,flash8Functions,flash8Constants,flash8Properties,flash8Classes,as3Properties,as3Classes,as3Packages,as3Functions,as3Constants,actionScriptInclude,as3Errors,as3Events,actionScriptFunction
+syntax region  actionScriptBracket   matchgroup=actionScriptBracket transparent start="\[" end="\]" contains=@actionScriptAll,actionScriptParensErrB,actionScriptParensErrC,actionScriptBracket,actionScriptParen,actionScriptBlock,@htmlPreproc
+syntax region  actionScriptParen     matchgroup=actionScriptParen   transparent start="("  end=")"  contains=@actionScriptAll,actionScriptParensErrA,actionScriptParensErrC,actionScriptParen,actionScriptBracket,actionScriptBlock,@htmlPreproc
+syntax region  actionScriptBlock     matchgroup=actionScriptBlock   transparent start="{"  end="}"  contains=@actionScriptAll,actionScriptParensErrA,actionScriptParensErrB,actionScriptParen,actionScriptBracket,actionScriptBlock,@htmlPreproc 
+
 " catch errors caused by wrong parenthesis
-syn match   actionScriptInParen     contained "[{}]"
-syn region  actionScriptParen       transparent start="(" end=")" contains=actionScriptParen,actionScript.*
-syn match   actionScrParenError  ")"
+syntax match   actionScriptParensError    ")\|}\|\]"
+syntax match   actionScriptParensErrA     contained "\]"
+syntax match   actionScriptParensErrB     contained ")"
+syntax match   actionScriptParensErrC     contained "}"
 
 if main_syntax == "actionscript"
   syn sync ccomment actionScriptComment
+endif
+
+"" Fold control
+if exists("b:actionscript_fold")
+    syntax match   actionScriptFunction       /\<function\>/ nextgroup=actionScriptFuncName,actionScriptGetSet skipwhite
+    syntax match   actionScriptOpAssign       /=\@<!=/ nextgroup=actionScriptFuncBlock skipwhite skipempty
+    syntax match   actionScriptGetSet         /\%(get\|set\)\s\+/ nextgroup=actionScriptFuncName
+    syntax region  actionScriptFuncName       contained matchgroup=actionScriptFuncName start=/\%(\$\|\w\)*\s*(/ end=/)\%(:\w\+\)\?/ contains=actionScriptLineComment,actionScriptComment nextgroup=actionScriptFuncBlock skipwhite skipempty
+    syntax region  actionScriptFuncBlock      contained matchgroup=actionScriptFuncBlock start="{" end="}" contains=@actionScriptAll,actionScriptParensErrA,actionScriptParensErrB,actionScriptParen,actionScriptBracket,actionScriptBlock fold
+
+    if &l:filetype=='actionscript' && !&diff
+      " Fold setting
+      " Redefine the foldtext (to show a JS function outline) and foldlevel
+      " only if the entire buffer is actionScript, but not if actionScript syntax
+      " is embedded in another syntax (e.g. HTML).
+      setlocal foldmethod=syntax
+      setlocal foldlevel=4
+    endif
+else
+    syntax keyword actionScriptGetSet get set
+    syntax keyword actionScriptFunction       function
+    setlocal foldmethod<
+    setlocal foldlevel<
 endif
 
 " Define the default highlighting.
@@ -116,13 +151,16 @@ if version >= 508 || !exists("did_actionscript_syn_inits")
   HiLink actionScriptNumber		actionScriptValue
   HiLink actionScriptBraces		Function
   HiLink actionScriptError		Error
-  HiLink actionScrParenError		actionScriptError
-  HiLink actionScriptInParen		actionScriptError
+  HiLink actionScriptParensError	Error
+  HiLink actionScriptParensErrA		Error
+  HiLink actionScriptParensErrB		Error
+  HiLink actionScriptParensErrC		Error
   HiLink actionScriptConditional	Conditional
   HiLink actionScriptRepeat		Repeat
   HiLink actionScriptCase		Label
   HiLink actionScriptConstructor	Operator
   HiLink actionScriptObjects		Operator
+  HiLink actionScriptGetSet		Operator
   HiLink actionScriptStatement		Statement
   HiLink actionScriptFunction		Function
   HiLink actionScriptValue		Boolean
